@@ -1,0 +1,6 @@
+[submodule "extern/eigen"]
+	path = extern/eigen
+	url = https://gitlab.com/libeigen/eigen.git
+[submodule "extern/cppflow"]
+	path = extern/cppflow
+	url = https://github.com/serizba/cppflow.git

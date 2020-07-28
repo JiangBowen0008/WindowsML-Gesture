@@ -32,10 +32,11 @@ int main(int argc, char* argv[]) {
 
 		vector<float> rawData(8192);
 		std::iota(data.begin(), data.end(), fmod(rand(), 5));
+		auto feat = featExtractor.extractFeature(rawData);
 
 		auto start = chrono::high_resolution_clock::now();
-		auto feat = featExtractor.extractFeature(rawData);
-		cout << feat;
+		
+		// cout << feat;
 		net.getPred(data);
 		auto end = chrono::high_resolution_clock::now();
 		totalTime += chrono::duration_cast<chrono::duration<float>>(end - start).count();

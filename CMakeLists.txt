@@ -17,7 +17,7 @@ set(EXECUTABLE_OUTPUT_PATH "${CMAKE_BINARY_DIR}")
 
 # include eigen
 find_package (Eigen3 3.3 REQUIRED NO_MODULE)
-include_directories(${CMAKE_CURRENT_LIST_DIR}/extern/eigen-master)
+include_directories(${CMAKE_CURRENT_LIST_DIR}/extern/eigen)
 link_libraries(Eigen3::Eigen)
 
 # include tensorflow
