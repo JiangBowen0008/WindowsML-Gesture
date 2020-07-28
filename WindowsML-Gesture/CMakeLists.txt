@@ -4,12 +4,12 @@
 cmake_minimum_required (VERSION 3.1)
 
 # Add source to this project's executable.
-add_executable (${PROJECT_NAME} "WindowsML-Gesture.cpp" ${aux_src} ${cppflow_path}/src/Model.cpp ${cppflow_path}/src/Tensor.cpp)
+add_executable (WindowsML-Gesture WindowsML-Gesture.cpp ${aux_src} ${cppflow_path}/src/Model.cpp ${cppflow_path}/src/Tensor.cpp)
 message(${TENSORFLOW_LIB})
-target_link_libraries(${PROJECT_NAME} ${TENSORFLOW_LIB} Eigen3::Eigen)
+target_link_libraries(WindowsML-Gesture ${TENSORFLOW_LIB} Eigen3::Eigen)
 
 add_custom_command(
-  TARGET ${PROJECT_NAME} POST_BUILD
+  TARGET WindowsML-Gesture POST_BUILD
   COMMAND ${CMAKE_COMMAND} -E copy 
     ${file_copy}
     $<TARGET_FILE_DIR:${PROJECT_NAME}>)

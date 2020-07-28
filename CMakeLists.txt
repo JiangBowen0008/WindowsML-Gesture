@@ -12,14 +12,13 @@ SET(CMAKE_BUILD_TYPE "Release")
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-set(LIBRARY_OUTPUT_PATH "${CMAKE_BINARY_DIR}")
-set(EXECUTABLE_OUTPUT_PATH "${CMAKE_BINARY_DIR}")
+# set(LIBRARY_OUTPUT_PATH "${CMAKE_BINARY_DIR}")
+# set(EXECUTABLE_OUTPUT_PATH "${CMAKE_BINARY_DIR}")
 
 # include eigen
-set(Eigen3_DIR ${CMAKE_CURRENT_LIST_DIR}/extern/eigen/cmake)
+# set(Eigen3_DIR ${CMAKE_CURRENT_LIST_DIR}/extern/eigen/cmake)
 find_package (Eigen3 3.3 REQUIRED NO_MODULE)
 include_directories(${CMAKE_CURRENT_LIST_DIR}/extern/eigen)
-link_libraries(Eigen3::Eigen)
 
 # include tensorflow
 set(tf_path ${CMAKE_CURRENT_LIST_DIR}/extern/libtensorflow-cpu-windows)
