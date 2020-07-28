@@ -16,6 +16,7 @@ set(LIBRARY_OUTPUT_PATH "${CMAKE_BINARY_DIR}")
 set(EXECUTABLE_OUTPUT_PATH "${CMAKE_BINARY_DIR}")
 
 # include eigen
+set(Eigen3_DIR ${CMAKE_CURRENT_LIST_DIR}/extern/eigen/cmake)
 find_package (Eigen3 3.3 REQUIRED NO_MODULE)
 include_directories(${CMAKE_CURRENT_LIST_DIR}/extern/eigen)
 link_libraries(Eigen3::Eigen)
@@ -35,6 +36,15 @@ include_directories(${cppflow_path}/include)
 include_directories(${CMAKE_CURRENT_LIST_DIR}/include)
 aux_source_directory(${CMAKE_CURRENT_LIST_DIR}/src aux_src)
 
+# copy the files we need
+file(GLOB lib_copy "${CMAKE_CURRENT_LIST_DIR}/lib/*.dll")
+file(GLOB asset_copy "${CMAKE_CURRENT_LIST_DIR}/assets/*")
+set(file_copy ${lib_copy} ${asset_copy})
+message(${file_copy})
+
 # Include sub-projects.
 message(${TENSORFLOW_LIB})
 add_subdirectory ("WindowsML-Gesture")
+
+
+
