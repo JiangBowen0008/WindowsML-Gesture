@@ -4,6 +4,3 @@
 [submodule "extern/cppflow"]
 	path = extern/cppflow
 	url = https://github.com/serizba/cppflow.git
-[submodule "extern/rtaudio"]
-	path = extern/rtaudio
-	url = https://github.com/thestk/rtaudio.git
