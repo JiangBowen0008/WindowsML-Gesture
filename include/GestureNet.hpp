@@ -1,17 +1,12 @@
 #ifndef GESTURE_NET_HPP
 #define GESTURE_NET_HPP
 
+#include "utils.hpp"
 #include "Model.h"
 #include "Tensor.h"
 
-#include <numeric>
 #include <iomanip>
-#include <string>
 #include <chrono>
-#include <math.h>
-#include <algorithm>
-
-using namespace std;
 
 #define _DEBUG_NET
 

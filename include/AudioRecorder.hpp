@@ -1,15 +1,12 @@
 #ifndef AUDIO_RECORDER_HPP
 #define AUDIO_RECORDER_HPP
 
-#define __WINDOWS_DS__
-
 #include "RtAudio.h"
+#include "utils.hpp"
 #include <iostream>
 #include <cstdlib>
 #include <cstring>
 #include <map>
-
-using namespace std;
 
 class AudioRecorder
 {

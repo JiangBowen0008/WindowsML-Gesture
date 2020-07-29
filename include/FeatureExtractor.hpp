@@ -1,11 +1,10 @@
 #ifndef FEATURE_EXTRACTOR_HPP
 #define FEATURE_EXTRACTOR_HPP
 
+#include "utils.hpp"
 #include "Eigen/Core"
 #include "Eigen/Dense"
 #include "unsupported/Eigen/FFT"
-#include <tuple>
-#include <iostream>
 
 #include <math.h>
 
@@ -20,7 +19,6 @@
 #define DBOUT 0 && cout
 #endif
 
-using namespace std;
 using Eigen::Matrix;
 using Eigen::ArrayXf;
 using Eigen::MatrixXf;

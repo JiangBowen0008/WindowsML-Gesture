@@ -14,6 +14,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 # set(LIBRARY_OUTPUT_PATH "${CMAKE_BINARY_DIR}")
 # set(EXECUTABLE_OUTPUT_PATH "${CMAKE_BINARY_DIR}")
+link_directories(${CMAKE_CURRENT_LIST_DIR}/lib)
 
 # include eigen
 # set(Eigen3_DIR ${CMAKE_CURRENT_LIST_DIR}/extern/eigen/cmake)
@@ -32,10 +33,9 @@ include_directories(${cppflow_path}/include)
 # aux_source_directory(${cppflow_path}/src aux_src)
 
 # incldue RTAudio
-set(RTAudio_path ${CMAKE_CURRENT_LIST_DIR}/extern/rtaudio)
-include_directories(${RTAudio_path}/include)
-include_directories(${RTAudio_path})
-add_subdirectory(${RTAudio_path})
+# set(RTAudio_path ${CMAKE_CURRENT_LIST_DIR}/extern/rtaudio)
+# include_directories(${RTAudio_path})
+# # add_subdirectory(${RTAudio_path})
 
 # local files
 include_directories(${CMAKE_CURRENT_LIST_DIR}/include)
