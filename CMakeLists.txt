@@ -31,6 +31,9 @@ set(cppflow_path ${CMAKE_CURRENT_LIST_DIR}/extern/cppflow)
 include_directories(${cppflow_path}/include)
 # aux_source_directory(${cppflow_path}/src aux_src)
 
+# incldue RTAudio
+set(RTAudio_path ${CMAKE_CURRENT_LIST_DIR}/extern/)
+
 # local files
 include_directories(${CMAKE_CURRENT_LIST_DIR}/include)
 aux_source_directory(${CMAKE_CURRENT_LIST_DIR}/src aux_src)
