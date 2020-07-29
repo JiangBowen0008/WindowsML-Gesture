@@ -5,6 +5,8 @@
 #include <vector>
 #include "GestureNet.hpp"
 #include "FeatureExtractor.hpp"
+#include "AudioRecorder.hpp"
+
 
 using namespace std;
 
@@ -18,21 +20,23 @@ int main(int argc, char* argv[]) {
 	// Model model("../model.pb", ModelConfigOptions);
 
 	// string modelName(argv[1]);
-	string modelName = "../../../assets/VadNet_9.pb";
+	string modelName = "VadNet_9.pb";
+	AudioRecorder recorder;
 	cout << "Using " << modelName << endl;
 	GestureNet net(modelName, "input", "softmax");
 	FeatureExtractor featExtractor;
 
 	float totalTime = 0.0f;
 	size_t numTrials = 1000;
+	vector<float> data(14);
+	std::iota(data.begin(), data.end(), fmod(rand(), 100));
+
 	for (int i = 0; i < 1000; ++i)
 	{
-		vector<float> data(14);
-		std::iota(data.begin(), data.end(), fmod(rand(), 100));
-
-		vector<float> rawData(8192);
-		std::iota(data.begin(), data.end(), fmod(rand(), 5));
-		auto feat = featExtractor.extractFeature(rawData);
+		
+		//vector<float> rawData(8192);
+		//std::iota(data.begin(), data.end(), fmod(rand(), 5));
+		//auto feat = featExtractor.extractFeature(rawData);
 
 		auto start = chrono::high_resolution_clock::now();
 		
