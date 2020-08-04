@@ -37,5 +37,12 @@ out/*
 build/*
 
 # lib
-# lib/*
+lib/*
 *.pdb
+
+#extern
+*.lib
+*.pdb
+extern/rtaudio/*
+extern/onnxruntime-win-x64-1.4.0
+extern/libtensorflow-cpu-windows

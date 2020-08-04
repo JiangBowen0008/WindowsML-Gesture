@@ -2,13 +2,8 @@
 #define GESTURE_NET_HPP
 
 #include "utils.hpp"
-#include "Model.h"
-#include "Tensor.h"
 
-#include <iomanip>
-#include <chrono>
-
-#define _DEBUG_NET
+//#define _DEBUG_NET
 
 // debug streaming
 #ifdef _DEBUG_NET
@@ -21,14 +16,12 @@
 
 class GestureNet
 {
-   public:
-    GestureNet(string modelName, string inputName, string outputName);
-    ~GestureNet() = default;
-    int getPred(vector<float>& _input);
-
-   private:
-    Model model_;
-    Tensor input_, output_;
+public:
+    GestureNet() = default;
+    virtual ~GestureNet() = default;
+    virtual int getPred(vector<float>& _input) = 0;
+protected:
+    virtual int rankPred(vector<float>& predictions);
 };
 
 #endif

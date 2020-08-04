@@ -7,6 +7,7 @@
 #include "unsupported/Eigen/FFT"
 
 #include <math.h>
+#include <fstream>
 
 // #define _DEBUG_FEAT
 
@@ -35,7 +36,7 @@ class FeatureExtractor
     FeatureExtractor(double fs = 48e3,
                     double fc = 19e3,
                     size_t = 8192,
-                    double _dfc = 450,
+                    double _dfc = 400,
                     double _dfc2 = 50);
     ~FeatureExtractor() = default;
     Floats extractFeature(Floats&);
@@ -44,6 +45,8 @@ class FeatureExtractor
     double fs, fc, f0;
     size_t length;
     int AOIstart_, AOIend_, AOISegLen_;
+    std::ofstream logger, logger_fft;
+
 
     VectorXf cvt2Vect(Floats&);
     Floats cvt2Floats(VectorXf);

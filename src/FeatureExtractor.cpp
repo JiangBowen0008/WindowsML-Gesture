@@ -15,9 +15,14 @@ FeatureExtractor::FeatureExtractor( double _fs,
                                 fc(_fc), fs(_fs), length(_length)
 
 {
+    logger.open("log.txt", ios_base::out);
+    logger_fft.open("logfft.txt", ios_base::out);
+
     f0 = fs / (length);
     int center = ceil(fc / f0);
+    cout << "center: " << center << endl;
     int dn = floor( _dfc / f0);
+    cout << "dn: " << dn << endl;
     AOIstart_ = center - dn;
     AOIend_ = center + dn;
     AOISegLen_ = floor( _dfc2 / f0);
@@ -39,12 +44,15 @@ Floats FeatureExtractor::extractFeature(Floats& _signal)
     // preprocessing (obtaining AOI in Eigen vector form)
     VectorXf signal = cvt2Vect(_signal);
     signal = VectorXf::Random(_signal.size());
+    //logger << signal << endl;
     auto [freq_, amp_] = FFT(signal, fs);
+    
     
     VectorXf f = extractAOI(freq_);
     VectorXf s = extractAOI(amp_);
     VectorXf f_ = excludeAOI(f);
     VectorXf s_ = excludeAOI(s);
+    //logger_fft << f << endl;
 
     int spectLen = f.size();
     // DBOUT << "frequency: " << f << endl;
@@ -147,19 +155,4 @@ VectorXf FeatureExtractor::excludeAOI(VectorXf input)
     VectorXf joined(2 * AOISegLen_);
     joined << input.head(AOISegLen_), input.tail(AOISegLen_);
     return joined;
-}
-
-
-/*----------------------------------------------------------------
-                        Utility Functions
-----------------------------------------------------------------*/
-
-ostream& operator<<(ostream& os, const Floats& floats)
-{
-    for (auto& f : floats)
-    {
-        os << f << "\t";
-    }
-    os << endl;
-    return os;
 }

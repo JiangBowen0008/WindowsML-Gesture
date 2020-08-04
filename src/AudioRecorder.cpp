@@ -6,23 +6,48 @@
 
 vector<float> AudioRecorder::readAudio()
 {
+	assert(readRdy());			// only allow read when it is ready
+	
+	// read from buffer
 	vector<float> recording;
+	recording.assign(buffer_.end() - nfft, buffer_.end());
+
+	// popping one step of frames from the buffer
+	buffer_.resize(buffer_.size() - step);
+
 	return recording;
+}
+
+bool AudioRecorder::readRdy()
+{
+	bool result = buffer_.size() > nfft;
+	result = result && (bufferCounter_ > step);
+	return result;
 }
 
 /*-----------------------------------------------------------
 					Helper Functions 
 -----------------------------------------------------------*/
 
-int record(void* outputBuffer, void* inputBuffer, unsigned int nBufferFrames,
-	double streamTime, RtAudioStreamStatus status, void* userData)
+int AudioRecorder::record(	void* outputBuffer, void* inputBuffer, unsigned int nBufferFrames,
+							double streamTime, RtAudioStreamStatus status, void* userData)
 {
 	if (status)
 		std::cout << "Stream overflow detected!" << std::endl;
 	// Do something with the data in the "inputBuffer" buffer.
 	float* inputPtr = (float*)inputBuffer;
-	cout << *inputPtr << endl;
+	AudioRecorder* recorderPtr = (AudioRecorder*)userData;
+	recorderPtr->writeBuffer(0);
+	//cout << *inputPtr << endl;
 	return 0;
+}
+
+void AudioRecorder::writeBuffer(float signal)
+{
+	buffer_.push_front(signal);
+	if (buffer_.size() > bufferSize) buffer_.pop_back();
+	bufferCounter_++;
+	//cout << bufferCounter_ << endl;
 }
 
 void AudioRecorder::printAPIs()
@@ -68,12 +93,13 @@ AudioRecorder::AudioRecorder()
 	parameters.firstChannel = 0;
 
 	try {
-		adc.openStream(	NULL, 
-						&parameters,
-						RTAUDIO_FLOAT32,
-						sampleRate,
-						&bufferFrames,
-						&record);
+		adc.openStream(NULL,
+			&parameters,
+			RTAUDIO_FLOAT32,
+			sampleRate,
+			&bufferFrames,
+			&record,
+			this);
 		adc.startStream();
 	}
 	catch (RtAudioError& e) {

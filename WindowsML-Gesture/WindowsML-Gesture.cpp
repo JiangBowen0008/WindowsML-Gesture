@@ -1,14 +1,11 @@
 ﻿// WindowsML-Gesture.cpp : Defines the entry point for the application.
 //
 
-#include <iostream>
-#include <vector>
-#include "GestureNet.hpp"
+#include "utils.hpp"
+#include "GestureNetTF.hpp"
+#include "GestureNetONNX.hpp"
 #include "FeatureExtractor.hpp"
 #include "AudioRecorder.hpp"
-
-
-using namespace std;
 
 int main(int argc, char* argv[]) {
 	// Load model with a path to the .pb file. 
@@ -23,27 +20,34 @@ int main(int argc, char* argv[]) {
 	string modelName = "VadNet_9.pb";
 	AudioRecorder recorder;
 	cout << "Using " << modelName << endl;
-	GestureNet net(modelName, "input", "softmax");
+	GestureNetTF net(modelName, "input", "softmax");
+	//GestureNetONNX net("VadNet.onnx");
 	FeatureExtractor featExtractor;
 
 	float totalTime = 0.0f;
-	size_t numTrials = 1000;
-	vector<float> data(14);
-	std::iota(data.begin(), data.end(), fmod(rand(), 100));
+	size_t numTrials = 100;
+	vector<float> data(14, 0.0f);
+	// std::iota(data.begin(), data.end(), fmod(rand(), 100));
 
-	for (int i = 0; i < 1000; ++i)
+	int i = 0;
+	while (i < numTrials)
 	{
 		
-		//vector<float> rawData(8192);
+		vector<float> rawData(8192);
 		//std::iota(data.begin(), data.end(), fmod(rand(), 5));
-		//auto feat = featExtractor.extractFeature(rawData);
-
-		auto start = chrono::high_resolution_clock::now();
 		
-		// cout << feat;
-		net.getPred(data);
-		auto end = chrono::high_resolution_clock::now();
-		totalTime += chrono::duration_cast<chrono::duration<float>>(end - start).count();
+		//cout << feat;
+
+		auto start = std::chrono::high_resolution_clock::now();
+		if (recorder.readRdy())
+		{
+			i++;
+			rawData = recorder.readAudio();
+			auto feat = featExtractor.extractFeature(rawData);
+			net.getPred(feat);
+		}
+		auto end = std::chrono::high_resolution_clock::now();
+		totalTime += std::chrono::duration_cast<std::chrono::duration<float>>(end - start).count();
 	}
 
 	cout << "Average time: " << totalTime / numTrials << endl;
