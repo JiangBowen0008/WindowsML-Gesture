@@ -39,7 +39,6 @@ build/*
 # lib
 lib/*
 *.pdb
-lib
 
 #extern
 *.lib
