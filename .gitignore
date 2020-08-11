@@ -37,5 +37,14 @@ out/*
 build/*
 
 # lib
-# lib/*
+lib/*
 *.pdb
+lib
+
+#extern
+*.lib
+*.pdb
+extern
+
+# logs
+scripts/*.txt

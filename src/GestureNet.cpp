@@ -1,27 +1,15 @@
-#include "GestureNet.hpp"
+# include "GestureNet.hpp"
 
-GestureNet::GestureNet( string modelName,
-                        string inputName,
-                        string outputName):
-                model_{modelName},
-                input_{model_, inputName},
-                output_{model_, outputName}
-{}
-
-int GestureNet::getPred(vector<float> &_input)
+int GestureNet::rankPred(vector<float>& predictions)
 {
-    input_.set_data(_input);
-    model_.run({&input_}, output_);
-    auto results =  output_.get_data<float>();
-
-    int maxIdx = distance(results.begin(),
-                            max_element(results.begin(),
-                                        results.end()));
+    int maxIdx = distance(  predictions.begin(),
+                            max_element(predictions.begin(),
+                                        predictions.end()));
     DBOUT << "Pred: " << maxIdx << "\t(";
-    for (float f : results) {
+    for (float f : predictions) {
         DBOUT << f << " ";
     }
     DBOUT << ")" << endl;
 
-    return 0;
+    return maxIdx;
 }

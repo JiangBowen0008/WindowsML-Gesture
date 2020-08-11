@@ -23,7 +23,7 @@ include_directories(${CMAKE_CURRENT_LIST_DIR}/extern/eigen)
 
 # include tensorflow
 set(tf_path ${CMAKE_CURRENT_LIST_DIR}/extern/libtensorflow-cpu-windows)
-find_library(TENSORFLOW_LIB tensorflow HINT ${tf_path}/lib REQUIRED ABSOLUTE)
+find_library(TENSORFLOW_LIB tensorflow HINT ${tf_path}/lib REQUIRED)
 include_directories(${tf_path}/include)
 link_directories(${tf_path}/lib)
 
@@ -36,6 +36,13 @@ include_directories(${cppflow_path}/include)
 # set(RTAudio_path ${CMAKE_CURRENT_LIST_DIR}/extern/rtaudio)
 # include_directories(${RTAudio_path})
 # # add_subdirectory(${RTAudio_path})
+
+# include onnx runtime
+set(onnx_path ${CMAKE_CURRENT_LIST_DIR}/extern/onnxruntime-win-x64-1.4.0)
+include_directories(${onnx_path}/incldue)
+find_library(ONNX_LIB onnxruntime HINT ${onnx_path}/lib)
+link_directories(${onnx_path}/lib)
+message(${ONNX_LIB})
 
 # local files
 include_directories(${CMAKE_CURRENT_LIST_DIR}/include)

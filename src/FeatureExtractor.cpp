@@ -15,19 +15,41 @@ FeatureExtractor::FeatureExtractor( double _fs,
                                 fc(_fc), fs(_fs), length(_length)
 
 {
+    logger.open("log.txt", ios_base::out);
+    logger_fft.open("logfft.txt", ios_base::out);
+
     f0 = fs / (length);
     int center = ceil(fc / f0);
+    
     int dn = floor( _dfc / f0);
+    
+    // set segmentation index & length
     AOIstart_ = center - dn;
-    AOIend_ = center + dn;
-    AOISegLen_ = floor( _dfc2 / f0);
+    AOIend_ = center + dn - 1;
+    AOISegLen_ = (dn * 2 + 1 - (2 * (floor( _dfc2 / f0) - 1) + 1))/2;
+
+    // set window
+    window = hammingWindow();
+    window_s = 0.5 * window.cwiseAbs2().sum();
+    window_m = 0.5 * window.sum();
+
+    DBOUT << "----Configuration for sfft----" << endl;
+    DBOUT << "center:\t" << center << endl;
+    DBOUT << "dn: \t" << dn << endl;
+    DBOUT << "dn2: \t" << AOISegLen_ << endl;
+    DBOUT << "Window Type:\tHamming" << endl;
+    DBOUT << "Window Energy:\t" << window_s << endl;
+    DBOUT << "Window Magnitude:\t" << window_m << endl;
+    DBOUT << "------------------------------" << endl;
 }
+
+
 
 /*----------------------------------------------------------------
                         Main Function
 ----------------------------------------------------------------*/
 
-Floats FeatureExtractor::extractFeature(Floats& _signal)
+Floats FeatureExtractor::extractFeature(const MatrixXf& _signal)
 {
     /**
      * Main function of feature extractor
@@ -37,45 +59,66 @@ Floats FeatureExtractor::extractFeature(Floats& _signal)
      */
 
     // preprocessing (obtaining AOI in Eigen vector form)
-    VectorXf signal = cvt2Vect(_signal);
-    signal = VectorXf::Random(_signal.size());
+    VectorXf signal = _signal.row(0);
+    //logger << signal << endl;
+
+    //logger << signal << endl;
     auto [freq_, amp_] = FFT(signal, fs);
+    //logger_fft << amp_ << endl;
     
     VectorXf f = extractAOI(freq_);
-    VectorXf s = extractAOI(amp_);
+    
+    VectorXf s = extractAOI(amp_).cwiseAbs2() / window_s;
+    VectorXf m = extractAOI(amp_).cwiseAbs() / window_m;
+    
     VectorXf f_ = excludeAOI(f);
     VectorXf s_ = excludeAOI(s);
+    VectorXf m_ = excludeAOI(m);
+    logger_fft << m << endl;
+    DBOUT << "Freq Mean: \t" << f.mean() << endl;
+    logger << f << endl;
 
     int spectLen = f.size();
+    DBOUT << "SpectLen\t" << spectLen << endl;
+    DBOUT << "SpectLen2\t" << f_.size() << endl;
     // DBOUT << "frequency: " << f << endl;
     // DBOUT << "s: " << s << endl;
 
     //  calculating means and var with the middle spectrum excluded
-    float rms = s_.cwiseAbs2().mean();
-    float avg = s_.cwiseAbs().mean();
-    float var = (s_.array() - avg).abs2().mean();
+    float energy = s_.sum();
+    float avg = m_.mean();
+    //float var = (m_.array() - avg).abs2().mean();
+
+    // aux vars
+    float freqBand = /*f[f.size() - 1] - f[0]*/f.size();
+    float ssum = s.sum();
+    float msum = m.sum();
+    float eps = std::nextafter(0.0f, 1.0f);
+    VectorXf prob = s / ssum;
+    DBOUT << "freqBand\t" << freqBand << endl;
 
     // feature calculation using the full spectrum
-    float centroid = s.dot(f) / s.sum();
-    float spread = sqrt ((f.array() - centroid).square().matrix().dot(s) / s.sum());
-    float skewness = (f.array() - centroid).cube().matrix().dot(s) / (s.sum() * pow(spread, 3));
-    float kurtosis = (f.array() - centroid).pow(4).matrix().dot(s) / (s.sum() * pow(spread, 4));
-    float entropy = -s.dot(s.array().log().matrix()) / (log(spectLen));
-    float flatness = pow(s.prod(), 1/spectLen) / (s.sum() / spectLen);
-    float crest = s.maxCoeff() / (s.sum() / spectLen);
+    auto centroid = s.dot(f) / ssum;
+    auto spread = sqrt ((f.array() - centroid).square().matrix().dot(s) / ssum);
+    auto skewness = (f.array() - centroid).cube().matrix().dot(s) / (ssum * pow(spread, 3.0f));
+    auto kurtosis = (f.array() - centroid).pow(4).matrix().dot(s) / (ssum * pow(spread, 4.0f));
+    auto entropy = -prob.dot(log2(prob)) / (log2(freqBand));
+    //auto flatness = pow(s.prod(), 1/freqBand) / (ssum / freqBand);
+    auto flatness = exp(s.array().log().mean()) / s.mean();
+    auto crest = s.maxCoeff() / (ssum / freqBand);
     auto diff = s.tail(spectLen - 1) - s.head(spectLen - 1);
-    float flux = pow(diff.cwiseAbs().sum(), 1);
+    auto flux = pow(diff.cwiseAbs().sum(), 1);
     auto fdiff = (f.array() - f.mean()).matrix();
-    auto sdiff = (s.array() - s.mean()).matrix();
-    float spectralSlope = fdiff.dot(sdiff) / fdiff.dot(fdiff);
-    VectorXf inverse(spectLen);
-    inverse.setLinSpaced(1, spectLen).cwiseInverse();
-    float decrease = (s.array() - s[0]).matrix().dot(inverse) / s.sum();
+    auto mdiff = (m.array() - m.mean()).matrix();
+    auto spectralSlope = fdiff.dot(mdiff) / fdiff.dot(fdiff);
+    VectorXf inverse(spectLen - 1);
+    inverse.setLinSpaced(1, spectLen);
+    VectorXf tempm(m.tail(spectLen - 1));
+    auto decrease = ((tempm.array() - m[0]) / inverse.array()).sum() / tempm.sum();
 
     // adding to the result
-    VectorXf feat(12);
-    feat << rms,
-            var,
+    VectorXf feat(11);
+    feat << energy,
             centroid,
             spread,
             skewness,
@@ -105,7 +148,7 @@ VectorXf FeatureExtractor::cvt2Vect(Floats& input)
     return output;
 }
 
-Floats FeatureExtractor::cvt2Floats(VectorXf input)
+Floats FeatureExtractor::cvt2Floats(VectorXf& input)
 {
     /**
      * Convert a std vector into an Eigen vector.
@@ -124,6 +167,12 @@ Fourier FeatureExtractor::FFT(VectorXf signal, double fs)
 {
     Eigen::FFT<float> fft;
 
+    //signal = signal.array();
+    
+    signal = (signal.array() * window.array());
+    //logger << signal << endl;
+    //DBOUT << "Signal" << endl;
+    //DBOUT << signal << endl;
     VectorXcf tmpOut(signal.size());
     fft.fwd(tmpOut, signal);
     VectorXf out = tmpOut.cwiseAbs().real();
@@ -131,10 +180,17 @@ Fourier FeatureExtractor::FFT(VectorXf signal, double fs)
     double T = 1 / fs;
     double f0 = 1 / (T * signal.size());
     VectorXf freq(signal.size());
-    freq.setLinSpaced(1 * f0, signal.size() * f0);
+    freq.setLinSpaced(0, (signal.size() - 1) * f0);
     
     return make_tuple(freq, out);
 }
+
+inline VectorXf log2(VectorXf& m)
+{
+    const float coe = std::log2(std::exp(1));
+    return (m.array().log() * coe).matrix();
+}
+
 
 VectorXf FeatureExtractor::extractAOI(VectorXf input)
 {
@@ -149,17 +205,10 @@ VectorXf FeatureExtractor::excludeAOI(VectorXf input)
     return joined;
 }
 
-
-/*----------------------------------------------------------------
-                        Utility Functions
-----------------------------------------------------------------*/
-
-ostream& operator<<(ostream& os, const Floats& floats)
+VectorXf FeatureExtractor::hammingWindow()
 {
-    for (auto& f : floats)
-    {
-        os << f << "\t";
-    }
-    os << endl;
-    return os;
+    ArrayXf n(length);
+    n.setLinSpaced(1, length);
+    ArrayXf window_ = 0.54 - 0.46 * (2 * M_PI * n / length).cos();
+    return window_.matrix();
 }

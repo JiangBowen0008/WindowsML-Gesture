@@ -1,14 +1,11 @@
 ﻿// WindowsML-Gesture.cpp : Defines the entry point for the application.
 //
 
-#include <iostream>
-#include <vector>
-#include "GestureNet.hpp"
+#include "utils.hpp"
+#include "GestureNetTF.hpp"
+#include "GestureNetONNX.hpp"
 #include "FeatureExtractor.hpp"
 #include "AudioRecorder.hpp"
-
-
-using namespace std;
 
 int main(int argc, char* argv[]) {
 	// Load model with a path to the .pb file. 
@@ -20,30 +17,41 @@ int main(int argc, char* argv[]) {
 	// Model model("../model.pb", ModelConfigOptions);
 
 	// string modelName(argv[1]);
-	string modelName = "VadNet_9.pb";
+	string modelName = "..\\..\\assets\\VadNet_9.onnx";
 	AudioRecorder recorder;
 	cout << "Using " << modelName << endl;
-	GestureNet net(modelName, "input", "softmax");
+	//GestureNetTF net(modelName, "input", "softmax");
+	GestureNetONNX net("..\\..\\assets\\VadNet_9.onnx");
 	FeatureExtractor featExtractor;
 
 	float totalTime = 0.0f;
-	size_t numTrials = 1000;
-	vector<float> data(14);
-	std::iota(data.begin(), data.end(), fmod(rand(), 100));
 
-	for (int i = 0; i < 1000; ++i)
+	size_t numTrials = 20;
+	vector<float> data(14, 0.0f);
+	// std::iota(data.begin(), data.end(), fmod(rand(), 100));
+
+	int i = 0;
+	while (i < numTrials)
 	{
 		
-		//vector<float> rawData(8192);
+		MatrixXf rawData;
 		//std::iota(data.begin(), data.end(), fmod(rand(), 5));
-		//auto feat = featExtractor.extractFeature(rawData);
-
-		auto start = chrono::high_resolution_clock::now();
 		
-		// cout << feat;
-		net.getPred(data);
-		auto end = chrono::high_resolution_clock::now();
-		totalTime += chrono::duration_cast<chrono::duration<float>>(end - start).count();
+		//cout << feat;
+		if (recorder.readRdy())
+		{
+			i++;
+			auto start = std::chrono::high_resolution_clock::now();
+			rawData = recorder.readAudio();
+			auto feat = featExtractor.extractFeature(rawData);
+			int result = net.getPred(data);
+			cout << "Pred: " << result << endl;
+			auto end = std::chrono::high_resolution_clock::now();
+
+			totalTime += std::chrono::duration_cast<std::chrono::duration<float>>(end - start).count();
+			
+		}
+		
 	}
 
 	cout << "Average time: " << totalTime / numTrials << endl;
