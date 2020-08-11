@@ -8,6 +8,7 @@
 #include <stdio.h>
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 //#define _DEBUG_ONNX
 
 // debug streaming
@@ -19,6 +20,8 @@
 #define DBOUT 0 && cout
 #endif
 
+=======
+>>>>>>> 0c39f00d3059dd1605821733e23d760b8870bdcd
 =======
 >>>>>>> 0c39f00d3059dd1605821733e23d760b8870bdcd
 class GestureNetONNX : public GestureNet

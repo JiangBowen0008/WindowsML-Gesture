@@ -3,6 +3,7 @@ clear all;
 close all
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 fileID = fopen("logAudio.txt");
 signal = textscan(fileID, '%f %f');
 ch1 = signal{1};
@@ -51,6 +52,8 @@ plot(ch1)
     F=(0:nfft-1)*(fs/nfft);
     f=F(c_point-N:c_point+N-1);
 =======
+=======
+>>>>>>> 0c39f00d3059dd1605821733e23d760b8870bdcd
 ch1 = textread("log.txt","%f");
 s1 = textread("logfft.txt","%f");
 % feat = extract_feature_matlab(ch, 48e3)
@@ -64,13 +67,19 @@ s1 = textread("logfft.txt","%f");
     N = 8;
     F=(0:nfft-1)*(fs/nfft);
     f=F(c_point-N+1:c_point+N);
+<<<<<<< HEAD
+>>>>>>> 0c39f00d3059dd1605821733e23d760b8870bdcd
+=======
 >>>>>>> 0c39f00d3059dd1605821733e23d760b8870bdcd
     
     [tf_ch1,~,~,~]=spectrogram(ch1,window,nfft-step,nfft);
     Ep_front_ch1=zeros(1,length(f));
     
 <<<<<<< HEAD
+<<<<<<< HEAD
     
+=======
+>>>>>>> 0c39f00d3059dd1605821733e23d760b8870bdcd
 =======
 >>>>>>> 0c39f00d3059dd1605821733e23d760b8870bdcd
     for idx_frame=1:size(tf_ch1,2)
@@ -85,8 +94,11 @@ s1 = textread("logfft.txt","%f");
     end
     
 <<<<<<< HEAD
+<<<<<<< HEAD
     temp_fft_window = abs(tf_ch1(c_point-N:c_point+N-1, :))/sum(abs(window)*0.5);
     
+=======
+>>>>>>> 0c39f00d3059dd1605821733e23d760b8870bdcd
 =======
 >>>>>>> 0c39f00d3059dd1605821733e23d760b8870bdcd
 function [sp2,feature,Ep_front]=exact_feature(Spect,c_point,N,window,f,Ep_front)
@@ -113,7 +125,11 @@ function [sp2,feature,Ep_front]=exact_feature(Spect,c_point,N,window,f,Ep_front)
     sslope=sum((f-mean(f)).*(Ep_m-mean(Ep_m)))./sum((f-mean(f)).^2);
     sflat=exp(sum(log(Ep + eps(class(gather(Ep)))))/length(Ep))./(sum(Ep/length(Ep)));%prod(Ep).^(1/length(Ep))/(sum(Ep)/length(Ep));
 <<<<<<< HEAD
+<<<<<<< HEAD
     sdecrease=sum((Ep_m(2:end)-Ep_m(1))./(1:length(Ep_m)-1))/sum(Ep_m(2:end));
+=======
+    sdecrease=sum((Ep(2:end)-Ep(1))./(1:length(Ep)-1))/sum(Ep(2:end));
+>>>>>>> 0c39f00d3059dd1605821733e23d760b8870bdcd
 =======
     sdecrease=sum((Ep(2:end)-Ep(1))./(1:length(Ep)-1))/sum(Ep(2:end));
 >>>>>>> 0c39f00d3059dd1605821733e23d760b8870bdcd
@@ -129,7 +145,11 @@ end
 function feature2=extract_feature_matlab(ch1,fs)
   SEntropy = spectralEntropy(ch1,fs, ...
 <<<<<<< HEAD
+<<<<<<< HEAD
         'Window', hamming(8192), ...
+=======
+        'Window', rectwin(8192), ...
+>>>>>>> 0c39f00d3059dd1605821733e23d760b8870bdcd
 =======
         'Window', rectwin(8192), ...
 >>>>>>> 0c39f00d3059dd1605821733e23d760b8870bdcd
@@ -138,7 +158,11 @@ function feature2=extract_feature_matlab(ch1,fs)
     
     SCentroid     = spectralCentroid(ch1,fs, ...
 <<<<<<< HEAD
+<<<<<<< HEAD
         'Window', hamming(8192), ...
+=======
+        'Window', rectwin(8192), ...
+>>>>>>> 0c39f00d3059dd1605821733e23d760b8870bdcd
 =======
         'Window', rectwin(8192), ...
 >>>>>>> 0c39f00d3059dd1605821733e23d760b8870bdcd
@@ -147,7 +171,11 @@ function feature2=extract_feature_matlab(ch1,fs)
     
     SCrest        = spectralCrest(ch1,fs, ...
 <<<<<<< HEAD
+<<<<<<< HEAD
         'Window', hamming(8192), ...
+=======
+        'Window', rectwin(8192), ...
+>>>>>>> 0c39f00d3059dd1605821733e23d760b8870bdcd
 =======
         'Window', rectwin(8192), ...
 >>>>>>> 0c39f00d3059dd1605821733e23d760b8870bdcd
@@ -157,7 +185,11 @@ function feature2=extract_feature_matlab(ch1,fs)
     
     SFlux         = spectralFlux(ch1,fs, ...
 <<<<<<< HEAD
+<<<<<<< HEAD
         'Window', hamming(8192), ...
+=======
+        'Window', rectwin(8192), ...
+>>>>>>> 0c39f00d3059dd1605821733e23d760b8870bdcd
 =======
         'Window', rectwin(8192), ...
 >>>>>>> 0c39f00d3059dd1605821733e23d760b8870bdcd
@@ -167,7 +199,11 @@ function feature2=extract_feature_matlab(ch1,fs)
     
     SKurtosis     = spectralKurtosis(ch1,fs, ...
 <<<<<<< HEAD
+<<<<<<< HEAD
         'Window', hamming(8192), ...
+=======
+        'Window', rectwin(8192), ...
+>>>>>>> 0c39f00d3059dd1605821733e23d760b8870bdcd
 =======
         'Window', rectwin(8192), ...
 >>>>>>> 0c39f00d3059dd1605821733e23d760b8870bdcd
@@ -177,7 +213,11 @@ function feature2=extract_feature_matlab(ch1,fs)
     
     SRolloffPoint = spectralRolloffPoint(ch1,fs, ...
 <<<<<<< HEAD
+<<<<<<< HEAD
         'Window', hamming(8192), ...
+=======
+        'Window', rectwin(8192), ...
+>>>>>>> 0c39f00d3059dd1605821733e23d760b8870bdcd
 =======
         'Window', rectwin(8192), ...
 >>>>>>> 0c39f00d3059dd1605821733e23d760b8870bdcd
@@ -187,7 +227,11 @@ function feature2=extract_feature_matlab(ch1,fs)
     
     SSkewness     = spectralSkewness(ch1,fs, ...
 <<<<<<< HEAD
+<<<<<<< HEAD
         'Window', hamming(8192), ...
+=======
+        'Window', rectwin(8192), ...
+>>>>>>> 0c39f00d3059dd1605821733e23d760b8870bdcd
 =======
         'Window', rectwin(8192), ...
 >>>>>>> 0c39f00d3059dd1605821733e23d760b8870bdcd
@@ -197,7 +241,11 @@ function feature2=extract_feature_matlab(ch1,fs)
     
     SSlope        = spectralSlope(ch1,fs, ...
 <<<<<<< HEAD
+<<<<<<< HEAD
         'Window', hamming(8192), ...
+=======
+        'Window', rectwin(8192), ...
+>>>>>>> 0c39f00d3059dd1605821733e23d760b8870bdcd
 =======
         'Window', rectwin(8192), ...
 >>>>>>> 0c39f00d3059dd1605821733e23d760b8870bdcd
@@ -207,7 +255,11 @@ function feature2=extract_feature_matlab(ch1,fs)
     
     SSpread        = spectralSpread(ch1,fs, ...
 <<<<<<< HEAD
+<<<<<<< HEAD
         'Window', hamming(8192), ...
+=======
+        'Window', rectwin(8192), ...
+>>>>>>> 0c39f00d3059dd1605821733e23d760b8870bdcd
 =======
         'Window', rectwin(8192), ...
 >>>>>>> 0c39f00d3059dd1605821733e23d760b8870bdcd
@@ -217,7 +269,11 @@ function feature2=extract_feature_matlab(ch1,fs)
     
     SDecrease        = spectralDecrease(ch1,fs, ...
 <<<<<<< HEAD
+<<<<<<< HEAD
         'Window', hamming(8192), ...
+=======
+        'Window', rectwin(8192), ...
+>>>>>>> 0c39f00d3059dd1605821733e23d760b8870bdcd
 =======
         'Window', rectwin(8192), ...
 >>>>>>> 0c39f00d3059dd1605821733e23d760b8870bdcd
@@ -227,7 +283,11 @@ function feature2=extract_feature_matlab(ch1,fs)
     
     SFlatness      = spectralFlatness(ch1,fs, ...
 <<<<<<< HEAD
+<<<<<<< HEAD
         'Window', hamming(8192), ...
+=======
+        'Window', rectwin(8192), ...
+>>>>>>> 0c39f00d3059dd1605821733e23d760b8870bdcd
 =======
         'Window', rectwin(8192), ...
 >>>>>>> 0c39f00d3059dd1605821733e23d760b8870bdcd
