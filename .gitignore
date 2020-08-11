@@ -10,12 +10,10 @@
 # Precompiled Headers
 *.gch
 *.pch
-*.lib
 
 # Compiled Dynamic libraries
 *.so
 *.dylib
-*.dll
 
 # Fortran module files
 *.mod
@@ -37,12 +35,8 @@ out/*
 build/*
 
 # lib
-lib/*
-*.pdb
 
 #extern
-*.lib
-*.pdb
 extern/libtensorflow-cpu-windows
 extern/onnxruntime-win-x64-1.4.0
 
