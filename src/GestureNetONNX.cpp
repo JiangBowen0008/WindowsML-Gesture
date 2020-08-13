@@ -15,20 +15,8 @@ int GestureNetONNX::getPred(vector<float>& _input)
                                                                 input_tensor_values.data(),
                                                                 input_tensor_size,
                                                                 input_node_dims.data(),
-<<<<<<< HEAD
-<<<<<<< HEAD
                                                                 3);
     assert(input_tensor.IsTensor());
-=======
-                                                                5);
-    assert(input_tensor.IsTensor());
-    DBOUT << "working so far" << endl;
->>>>>>> 0c39f00d3059dd1605821733e23d760b8870bdcd
-=======
-                                                                5);
-    assert(input_tensor.IsTensor());
-    DBOUT << "working so far" << endl;
->>>>>>> 0c39f00d3059dd1605821733e23d760b8870bdcd
     // score model & input tensor, get back output tensor
     auto output_tensors = session->Run( Ort::RunOptions{ nullptr },
                                         input_node_names.data(),
@@ -37,14 +25,6 @@ int GestureNetONNX::getPred(vector<float>& _input)
                                         output_node_names.data(),
                                         1/*output_node_names.size()*/);
     //assert(output_tensors.size() == 1 && output_tensors.front().IsTensor());
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
-    DBOUT << "working so far" << endl;
->>>>>>> 0c39f00d3059dd1605821733e23d760b8870bdcd
-=======
-    DBOUT << "working so far" << endl;
->>>>>>> 0c39f00d3059dd1605821733e23d760b8870bdcd
     // assign lstm buffers
     float* floatarr;
     //float* floatarr = output_tensors[1].GetTensorMutableData<float>();
@@ -76,13 +56,6 @@ GestureNetONNX::GestureNetONNX(string modelName) :
 {
     // initialize session options if needed
     session_options.SetIntraOpNumThreads(1);
-<<<<<<< HEAD
-<<<<<<< HEAD
-    //session_options.SetExecutionMode(ExecutionMode::ORT_PARALLEL);
-=======
->>>>>>> 0c39f00d3059dd1605821733e23d760b8870bdcd
-=======
->>>>>>> 0c39f00d3059dd1605821733e23d760b8870bdcd
 
     // If onnxruntime.dll is built with CUDA enabled, we can uncomment out this line to use CUDA for this
     // session (we also need to include cuda_provider_factory.h above which defines it)
@@ -100,15 +73,7 @@ GestureNetONNX::GestureNetONNX(string modelName) :
     std::wstring widestr = std::wstring(modelName.begin(), modelName.end());
     const wchar_t* model_path = widestr.c_str();
 
-<<<<<<< HEAD
-<<<<<<< HEAD
     DBOUT << "Using Onnxruntime C++ API" << endl;
-=======
-    cout << "Using Onnxruntime C++ API" << endl;
->>>>>>> 0c39f00d3059dd1605821733e23d760b8870bdcd
-=======
-    cout << "Using Onnxruntime C++ API" << endl;
->>>>>>> 0c39f00d3059dd1605821733e23d760b8870bdcd
     session = std::make_unique<Ort::Session>(env, model_path, session_options);
 
     //*************************************************************************
@@ -119,31 +84,15 @@ GestureNetONNX::GestureNetONNX(string modelName) :
     num_input_nodes = session->GetInputCount();
     input_node_names = vector<const char*>(num_input_nodes);
 
-<<<<<<< HEAD
-<<<<<<< HEAD
 
     DBOUT << "<------------------INPUTS-------------------->" << endl;
     DBOUT << "Number of inputs = " << num_input_nodes << endl;
-=======
-    printf("Number of inputs = %zu\n", num_input_nodes);
->>>>>>> 0c39f00d3059dd1605821733e23d760b8870bdcd
-=======
-    printf("Number of inputs = %zu\n", num_input_nodes);
->>>>>>> 0c39f00d3059dd1605821733e23d760b8870bdcd
 
     // iterate over all input nodes
     for (int i = 0; i < num_input_nodes; i++) {
         // print input node names
         char* input_name = session->GetInputName(i, allocator);
-<<<<<<< HEAD
-<<<<<<< HEAD
         DBOUT << "Input " << i << " : name=" << input_name << endl;
-=======
-        printf("Input %d : name=%s\n", i, input_name);
->>>>>>> 0c39f00d3059dd1605821733e23d760b8870bdcd
-=======
-        printf("Input %d : name=%s\n", i, input_name);
->>>>>>> 0c39f00d3059dd1605821733e23d760b8870bdcd
         input_node_names[i] = input_name;
 
         // print input node types
@@ -151,8 +100,6 @@ GestureNetONNX::GestureNetONNX(string modelName) :
         auto tensor_info = type_info.GetTensorTypeAndShapeInfo();
 
         ONNXTensorElementDataType type = tensor_info.GetElementType();
-<<<<<<< HEAD
-<<<<<<< HEAD
         DBOUT << "Input " << i << " : type=" << type << endl;
 
         // print input shapes/dims
@@ -196,20 +143,5 @@ GestureNetONNX::GestureNetONNX(string modelName) :
     size_t num_init_nodes = session->GetOverridableInitializerCount();
     auto init_node_names = vector<const char*>(num_input_nodes);
     DBOUT << "Number of OverridableInitializer = " << num_init_nodes << endl;
-=======
-=======
->>>>>>> 0c39f00d3059dd1605821733e23d760b8870bdcd
-        printf("Input %d : type=%d\n", i, type);
-
-        // print input shapes/dims
-        input_node_dims = tensor_info.GetShape();
-        printf("Input %d : num_dims=%zu\n", i, input_node_dims.size());
-        for (int j = 0; j < input_node_dims.size(); j++)
-            printf("Input %d : dim %d=%jd\n", i, j, input_node_dims[j]);
-    }
-<<<<<<< HEAD
->>>>>>> 0c39f00d3059dd1605821733e23d760b8870bdcd
-=======
->>>>>>> 0c39f00d3059dd1605821733e23d760b8870bdcd
 }
 
