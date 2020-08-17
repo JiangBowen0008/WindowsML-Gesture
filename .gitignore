@@ -39,6 +39,7 @@ build/*
 #extern
 extern/libtensorflow-cpu-windows
 extern/onnxruntime-win-x64-1.4.0
+extern/libtorch
 
 # logs
 scripts/*.txt

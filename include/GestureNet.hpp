@@ -3,7 +3,7 @@
 
 #include "utils.hpp"
 
-//#define _DEBUG_NET
+#define _DEBUG_NET
 
 // debug streaming
 #ifdef _DEBUG_NET

@@ -1,3 +1,4 @@
+#if GESTURE_TYPE == 1
 #include "GestureNetTF.hpp"
 
 GestureNetTF::GestureNetTF( string modelName,
@@ -19,3 +20,5 @@ int GestureNetTF::getPred(vector<float> &_input)
 
     return rankPred(preds);
 }
+
+#endif

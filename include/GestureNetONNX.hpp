@@ -7,7 +7,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-//#define _DEBUG_ONNX
+#define _DEBUG_ONNX
 
 // debug streaming
 #ifdef _DEBUG_ONNX
@@ -34,7 +34,7 @@ private:
     // inputs
     size_t num_input_nodes;
     vector<const char*> input_node_names;
-    vector<int64_t> input_node_dims;  // simplify... this model has only 1 input node {1, 3, 224, 224}.
+    vector<vector<int64_t>> input_node_dims;  // simplify... this model has only 1 input node {1, 3, 224, 224}.
                                            // Otherwise need vector<vector<>>
 
     // outputs
@@ -43,7 +43,14 @@ private:
     // buffer
     vector<float> lstm1_buffer, lstm2_buffer;
 
+    // state
+    vector<Ort::Value> packed_input;
+
+    // memory
+    Ort::MemoryInfo memory_info;
+
 protected:
+    void initializeStates();
 };
 
 #endif

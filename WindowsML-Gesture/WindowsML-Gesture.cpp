@@ -2,8 +2,9 @@
 //
 
 #include "utils.hpp"
-#include "GestureNetTF.hpp"
-#include "GestureNetONNX.hpp"
+//#include "GestureNetTF.hpp"
+//#include "GestureNetONNX.hpp"
+#include "GestureNetTorch.hpp"
 #include "FeatureExtractor.hpp"
 #include "AudioRecorder.hpp"
 
@@ -17,17 +18,17 @@ int main(int argc, char* argv[]) {
 	// Model model("../model.pb", ModelConfigOptions);
 
 	// string modelName(argv[1]);
-	string modelName = "..\\..\\assets\\VadNet_9.onnx";
+	string modelName = "..\\..\\assets\\test.pt";
 	AudioRecorder recorder;
 	cout << "Using " << modelName << endl;
 	//GestureNetTF net(modelName, "input", "softmax");
-	GestureNetONNX net("..\\..\\assets\\VadNet_9.onnx");
+	GestureNetTorch net(modelName);
 	FeatureExtractor featExtractor;
 
 	float totalTime = 0.0f;
 
 	size_t numTrials = 20;
-	vector<float> data(14, 0.0f);
+	vector<float> data(11, 0.0f);
 	// std::iota(data.begin(), data.end(), fmod(rand(), 100));
 
 	int i = 0;
@@ -49,7 +50,6 @@ int main(int argc, char* argv[]) {
 			auto end = std::chrono::high_resolution_clock::now();
 
 			totalTime += std::chrono::duration_cast<std::chrono::duration<float>>(end - start).count();
-			
 		}
 		
 	}

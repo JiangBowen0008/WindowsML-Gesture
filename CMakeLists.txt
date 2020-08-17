@@ -32,6 +32,12 @@ set(cppflow_path ${CMAKE_CURRENT_LIST_DIR}/extern/cppflow)
 include_directories(${cppflow_path}/include)
 # aux_source_directory(${cppflow_path}/src aux_src)
 
+# include torch
+set(torch_path ${CMAKE_CURRENT_LIST_DIR}/extern/libtorch)
+set(CMAKE_PREFIX_PATH ${torch_path})
+find_package(Torch REQUIRED)
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${TORCH_CXX_FLAGS}")
+
 # incldue RTAudio
 # set(RTAudio_path ${CMAKE_CURRENT_LIST_DIR}/extern/rtaudio)
 # include_directories(${RTAudio_path})
@@ -50,8 +56,9 @@ aux_source_directory(${CMAKE_CURRENT_LIST_DIR}/src aux_src)
 
 # copy the files we need
 file(GLOB lib_copy "${CMAKE_CURRENT_LIST_DIR}/lib/*.dll")
+file(GLOB TORCH_DLLS "${TORCH_INSTALL_PREFIX}/lib/*.dll")
 file(GLOB asset_copy "${CMAKE_CURRENT_LIST_DIR}/assets/*")
-set(file_copy ${lib_copy} ${asset_copy})
+set(file_copy ${lib_copy} ${asset_copy} ${TORCH_DLLS})
 message(${file_copy})
 
 # Include sub-projects.

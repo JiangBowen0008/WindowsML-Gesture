@@ -40,6 +40,7 @@ using std::deque;
 using std::ofstream;
 
 using std::unique_ptr;
+using std::shared_ptr;
 
 ostream& operator<<(ostream& os, const vector<float>& v);
 
