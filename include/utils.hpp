@@ -17,9 +17,11 @@
 #include <chrono>
 #include <deque>
 #include <fstream>
+#include <unordered_map>
 
 #define FC 19e3
 #define FS 48e3
+#define NUM_GEST 4
 
 using Eigen::Matrix;
 using Eigen::ArrayXf;
@@ -38,6 +40,7 @@ using std::tuple;
 using std::string;
 using std::deque;
 using std::ofstream;
+using std::unordered_map;
 
 using std::unique_ptr;
 using std::shared_ptr;

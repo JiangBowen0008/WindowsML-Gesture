@@ -19,31 +19,39 @@
 
 namespace F = torch::nn::functional;
 namespace jit = torch::jit;
+namespace indexing = torch::indexing;
 
 class GestureNetTorch : public GestureNet
 {
 public:
     GestureNetTorch() = delete;
-    GestureNetTorch(string modelName);
+    GestureNetTorch(string, string);
     virtual ~GestureNetTorch() = default;
     virtual int getPred(vector<float>& _input);
 
 private:
-    struct Net : torch::nn::Module
-    {
-        Net();
-        ~Net() = default;
-        torch::Tensor forward(torch::Tensor);
-        torch::nn::Linear fc1{nullptr}, fc2{nullptr};
-        torch::nn::LSTM lstm1{nullptr}, lstm2{nullptr};
-        tuple<torch::Tensor, torch::Tensor> hidden1_, hidden2_;
-    };
-    shared_ptr<Net> net;
+    //deprecated
+    //struct Net : torch::nn::Module
+    //{
+    //    Net();
+    //    ~Net() = default;
+    //    torch::Tensor forward(torch::Tensor);
+    //    torch::nn::Linear fc1{nullptr}, fc2{nullptr};
+    //    torch::nn::LSTM lstm1{nullptr}, lstm2{nullptr};
+    //    tuple<torch::Tensor, torch::Tensor> hidden1_, hidden2_;
+    //};
+    //shared_ptr<Net> net;
 
     // solution 2
-    jit::script::Module module;
+    jit::script::Module vadModule, gestModule;
     vector<jit::IValue> stackedInput;
-
+    torch::Tensor featBuffer;
+    int currentGest;
+protected:
+    int getVADPred(torch::Tensor& input);
+    bool gestPredRdy();
+    int getGestPred();
+    void addToBuffer(torch::Tensor& input);
 };
 
 #endif

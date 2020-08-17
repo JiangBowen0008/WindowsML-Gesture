@@ -22,12 +22,19 @@ int main(int argc, char* argv[]) {
 	AudioRecorder recorder;
 	cout << "Using " << modelName << endl;
 	//GestureNetTF net(modelName, "input", "softmax");
-	GestureNetTorch net(modelName);
+	GestureNetTorch net(modelName, modelName);
 	FeatureExtractor featExtractor;
+	unordered_map<int, string> gestDict = {
+		{0, "."},
+		{1, "\nPred: Left Swing\n"},
+		{2, "\nPred: Right Swing\n"},
+		{3, "\nPred: Double Click\n"}
+	};
+
 
 	float totalTime = 0.0f;
 
-	size_t numTrials = 20;
+	size_t numTrials = 100;
 	vector<float> data(11, 0.0f);
 	// std::iota(data.begin(), data.end(), fmod(rand(), 100));
 
@@ -46,7 +53,7 @@ int main(int argc, char* argv[]) {
 			rawData = recorder.readAudio();
 			auto feat = featExtractor.extractFeature(rawData);
 			int result = net.getPred(data);
-			cout << "Pred: " << result << endl;
+			cout << gestDict[result];
 			auto end = std::chrono::high_resolution_clock::now();
 
 			totalTime += std::chrono::duration_cast<std::chrono::duration<float>>(end - start).count();
@@ -55,5 +62,4 @@ int main(int argc, char* argv[]) {
 	}
 
 	cout << "Average time: " << totalTime / numTrials << endl;
-
 }

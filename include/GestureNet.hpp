@@ -3,7 +3,7 @@
 
 #include "utils.hpp"
 
-#define _DEBUG_NET
+//#define _DEBUG_NET
 
 // debug streaming
 #ifdef _DEBUG_NET
@@ -13,6 +13,8 @@
 #undef DBOUT
 #define DBOUT 0 && cout
 #endif
+
+#define FEAT_LEN 11
 
 class GestureNet
 {
