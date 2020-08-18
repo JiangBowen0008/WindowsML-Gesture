@@ -23,7 +23,7 @@ include_directories(${CMAKE_CURRENT_LIST_DIR}/extern/eigen)
 
 # include tensorflow
 set(tf_path ${CMAKE_CURRENT_LIST_DIR}/extern/libtensorflow-cpu-windows)
-find_library(TENSORFLOW_LIB tensorflow HINT ${CMAKE_CURRENT_LIST_DIR}/lib REQUIRED)
+find_library(TENSORFLOW_LIB tensorflow HINT ${CMAKE_CURRENT_LIST_DIR}/lib)
 include_directories(${tf_path}/include)
 link_directories(${tf_path}/lib)
 
