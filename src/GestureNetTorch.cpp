@@ -26,7 +26,7 @@
                      Main Functions
 -------------------------------------------------------*/
 
-int GestureNetTorch::getPred(vector<float>& _input)
+int GestureNetTorch::getPred(Floats& _input, tuple<Floats, Floats>& _rawInput)
 {
     /***************************************************
     *   Returns:    0:  No new gesture (not gesture)
@@ -36,16 +36,17 @@ int GestureNetTorch::getPred(vector<float>& _input)
     ****************************************************/
 
     // first converting input into pyTorch Tensor
-    auto opts = torch::TensorOptions().dtype(torch::kFloat32);
-    torch::Tensor input = torch::from_blob( _input.data(),
-                                            { static_cast<long long>(_input.size()) },
-                                            opts);
+    torch::Tensor input = cvt2Tensor(_input);
     input = input.resize_({ 1, FEAT_LEN });
     // Determines if it is noise
     int vadResult = getVADPred(input);
+    vadResult = 1;
+
     if (vadResult == 1)
     {
-        addToBuffer(input);
+        auto rawInput1 = cvt2Tensor(get<0>(_rawInput));
+        auto rawInput2 = cvt2Tensor(get<1>(_rawInput));
+        addToBuffer(rawInput1, rawInput2);
     } else {
         // clear the feature buffer
         featBuffer = torch::zeros( { 0 } );
@@ -67,12 +68,21 @@ int GestureNetTorch::getPred(vector<float>& _input)
     
     return 0;
 }
+
+int GestureNetTorch::getPred(vector<float>& _input)
+{
+    /* Deprecated */
+    vector<float> zeros(RAW_FEAT_LEN, 0.0f);
+    return getPred(_input, make_tuple(zeros, zeros));
+}
 /*-------------------------------------------------------
                     GestureNetTorch
                         Helpers
 -------------------------------------------------------*/
 int GestureNetTorch::getVADPred(torch::Tensor& input)
 {
+    /* Runs the VADNet part */
+
     stackedInput[0] = input.resize_({ 1, 1, 11 });
     auto outputs = vadModule.forward(stackedInput).toTuple();
 
@@ -95,9 +105,10 @@ int GestureNetTorch::getVADPred(torch::Tensor& input)
 
 int GestureNetTorch::getGestPred()
 {
-    auto input_ = featBuffer.reshape({60, 1, 11});
+    /* Runs the gestNet part */
+
     vector<jit::IValue> inputs;
-    inputs.emplace_back(input_);
+    inputs.emplace_back(featBuffer);
     //auto output = gestModule.forward(inputs).toTensor();
     auto output = torch::rand({ 4 });
 
@@ -113,13 +124,26 @@ int GestureNetTorch::getGestPred()
 
 bool GestureNetTorch::gestPredRdy()
 {
+    /* It checks if the buffer is long enough for calculation */
     bool result;
     result = (featBuffer.size(0) >= 60 );
     return result;
 }
 
-void GestureNetTorch::addToBuffer(torch::Tensor& input)
+void GestureNetTorch::addToBuffer(torch::Tensor& _input1,
+                                  torch::Tensor& _input2)
 {
+    /*********************************************************
+        It adds rawInput(fft results) from the two channels
+        and save it inside the buffer. The buffer is to be
+        used as input of gestNet.
+    **********************************************************/
+
+    // reshape and concatenate the inputs
+    torch::Tensor input1 = _input1.reshape({ 1, 1, RAW_FEAT_LEN });
+    torch::Tensor input2 = _input2.reshape({ 1, 1, RAW_FEAT_LEN });
+    torch::Tensor input = torch::cat({ input1, input2 }, 1);
+
     // adding to the buffer
     if (featBuffer.size(0) == 0) {
         featBuffer = input;
@@ -130,11 +154,20 @@ void GestureNetTorch::addToBuffer(torch::Tensor& input)
     }
     
     // remove the extra records
-    if (featBuffer.size(0) > 60) {
+    if (featBuffer.size(0) > WINDOW_SIZE) {
         featBuffer = featBuffer.index({ indexing::Slice(1,
                                                     indexing::None,
                                                     indexing::None)});
     }
+}
+
+inline torch::Tensor GestureNetTorch::cvt2Tensor(Floats input)
+{
+    /* It converts a std vector to a torch Tensor */
+    auto static opts = torch::TensorOptions().dtype(torch::kFloat32);
+    return torch::from_blob(input.data(),
+                            { static_cast<long long>(input.size()) },
+                            opts);
 }
 
 /*-------------------------------------------------------

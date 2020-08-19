@@ -51,8 +51,8 @@ int main(int argc, char* argv[]) {
 			i++;
 			auto start = std::chrono::high_resolution_clock::now();
 			rawData = recorder.readAudio();
-			auto feat = featExtractor.extractFeature(rawData);
-			int result = net.getPred(data);
+			auto [feat, rawFeat] = featExtractor.extractFeature(rawData);
+			int result = net.getPred(data, rawFeat);
 			cout << gestDict[result];
 			auto end = std::chrono::high_resolution_clock::now();
 

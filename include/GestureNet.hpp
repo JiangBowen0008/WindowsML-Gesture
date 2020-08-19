@@ -14,14 +14,16 @@
 #define DBOUT 0 && cout
 #endif
 
-#define FEAT_LEN 11
-
 class GestureNet
 {
 public:
     GestureNet() = default;
     virtual ~GestureNet() = default;
-    virtual int getPred(vector<float>& _input) = 0;
+
+    [[deprecated("Single input as extracted feature is deprecated. Input raw fft results as well.")]]
+    virtual int getPred(Floats& _input) = 0;
+
+    virtual int getPred(Floats& _input, tuple<Floats, Floats>& _rawInput) = 0;
 protected:
     virtual int rankPred(vector<float>& predictions);
 };

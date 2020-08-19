@@ -27,7 +27,8 @@ public:
     GestureNetTorch() = delete;
     GestureNetTorch(string, string);
     virtual ~GestureNetTorch() = default;
-    virtual int getPred(vector<float>& _input);
+    virtual int getPred(Floats& _input);
+    virtual int getPred(Floats& _input, tuple<Floats, Floats>& _rawInput);
 
 private:
     //deprecated
@@ -51,7 +52,9 @@ protected:
     int getVADPred(torch::Tensor& input);
     bool gestPredRdy();
     int getGestPred();
-    void addToBuffer(torch::Tensor& input);
+    void addToBuffer(torch::Tensor& input1, torch::Tensor& input2);
+
+    inline torch::Tensor cvt2Tensor(Floats);
 };
 
 #endif

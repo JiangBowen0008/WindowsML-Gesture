@@ -22,6 +22,9 @@
 #define FC 19e3
 #define FS 48e3
 #define NUM_GEST 4
+#define FEAT_LEN 11
+#define RAW_FEAT_LEN 136
+#define WINDOW_SIZE 72
 
 using Eigen::Matrix;
 using Eigen::ArrayXf;
@@ -37,6 +40,7 @@ using std::string;
 using std::map;
 using std::vector;
 using std::tuple;
+using std::get;
 using std::string;
 using std::deque;
 using std::ofstream;
@@ -44,6 +48,8 @@ using std::unordered_map;
 
 using std::unique_ptr;
 using std::shared_ptr;
+
+typedef vector<float> Floats;
 
 ostream& operator<<(ostream& os, const vector<float>& v);
 

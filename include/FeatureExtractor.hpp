@@ -18,7 +18,6 @@
 #define DBOUT 0 && cout
 #endif
 
-typedef vector<float> Floats;
 typedef tuple<VectorXf, VectorXf> Fourier;
 
 class FeatureExtractor
@@ -30,7 +29,7 @@ class FeatureExtractor
                     double _dfc = 400,
                     double _dfc2 = 50);
     ~FeatureExtractor() = default;
-    Floats extractFeature(const MatrixXf&);
+    tuple<Floats, tuple<Floats, Floats>> extractFeature(const MatrixXf&);
 
    private:
     double fs, fc, f0;

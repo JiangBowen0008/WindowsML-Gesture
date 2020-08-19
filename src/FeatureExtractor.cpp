@@ -49,24 +49,29 @@ FeatureExtractor::FeatureExtractor( double _fs,
                         Main Function
 ----------------------------------------------------------------*/
 
-Floats FeatureExtractor::extractFeature(const MatrixXf& _signal)
+tuple<Floats, tuple<Floats, Floats>> FeatureExtractor::extractFeature(const MatrixXf& _signal)
 {
-    /**
+    /******************************************************************
      * Main function of feature extractor
      * @param[in] _signal Signal as a std vector of float.
-     * @return A std vector containing the extracted feature of
-     *         the signal.
-     */
+     * @return A tuple that contains:
+     *          1.  A std vector that contains the extracted feature of
+     *                  the signal.
+     *          2.  A std vector that contains the raw fft (AOI)                    
+     ******************************************************************/
 
     // preprocessing (obtaining AOI in Eigen vector form)
     VectorXf signal = _signal.row(0);
+    VectorXf signal2 = _signal.row(1);
     //logger << signal << endl;
 
     //logger << signal << endl;
     auto [freq_, amp_] = FFT(signal, fs);
+    auto [freq2_, amp2_] = FFT(signal2, fs);
     //logger_fft << amp_ << endl;
     
     VectorXf f = extractAOI(freq_);
+    VectorXf f2 = extractAOI(freq2_);
     
     VectorXf s = extractAOI(amp_).cwiseAbs2() / window_s;
     VectorXf m = extractAOI(amp_).cwiseAbs() / window_m;
@@ -74,9 +79,14 @@ Floats FeatureExtractor::extractFeature(const MatrixXf& _signal)
     VectorXf f_ = excludeAOI(f);
     VectorXf s_ = excludeAOI(s);
     VectorXf m_ = excludeAOI(m);
+
+#ifdef _DEBUG_FEAT
+    // logging to external txt
     logger_fft << m << endl;
-    DBOUT << "Freq Mean: \t" << f.mean() << endl;
     logger << f << endl;
+#endif
+
+    DBOUT << "Freq Mean: \t" << f.mean() << endl;
 
     int spectLen = f.size();
     DBOUT << "SpectLen\t" << spectLen << endl;
@@ -131,7 +141,14 @@ Floats FeatureExtractor::extractFeature(const MatrixXf& _signal)
             decrease;
 
     DBOUT << "Extracted: " << endl << feat << endl;
-    return cvt2Floats(feat);
+
+    // concatenating raw fft results from the two channels
+    Floats tempF1 = cvt2Floats(f);
+    Floats tempF2 = cvt2Floats(f2);
+    assert(tempF1.size() == RAW_FEAT_LEN);
+    assert(tempF2.size() == RAW_FEAT_LEN);
+
+    return make_tuple(cvt2Floats(feat), make_tuple(tempF1, tempF2));
 }
 
 /*----------------------------------------------------------------
