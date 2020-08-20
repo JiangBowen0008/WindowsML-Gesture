@@ -57,14 +57,14 @@
 
 #### VADNet
 
-- Input: Size 1*1*11. See **featureTest.m** inside the **scripts** folder for the composition of the input.
+- Input: Size 1 * 1 * 11. See **featureTest.m** inside the **scripts** folder for the composition of the input.
 - Output: Size 2. Probabilities for 
  * **0:** No Gesture
  * **1:** Gesture
 
 #### GestNet
 
-- Input: Size WindowSize(by default 72)*2*136. Raw SFT results inside the window duration. To use a different window size, change the 'WINDOW_SIZE' in **utils.hpp**.
+- Input: Size WindowSize(by default 72) * 2 * 136. Raw SFT results inside the window duration. To use a different window size, change the 'WINDOW_SIZE' in **utils.hpp**.
 - Output: Size 4. Probabilities for
  * **0:** No Gesture
  * **1:** Left Swing
