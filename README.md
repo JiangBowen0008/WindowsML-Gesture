@@ -1,6 +1,11 @@
 # WindowsML-Gesture
  ML-based hand gesture recognition with Lenovo laptops.
  
+**Table of Contents**
+- [WindowsML-Gesture](#windowsml-gesture)
+ * [Supported Platforms](#supported-platforms)
+ * [Step-by-step Compilation Guide](#step-by-step-compilation-guide)
+    
 ## Supported Platforms
 - Windows
 - Linux (Not Tested)
@@ -45,5 +50,28 @@
  
  3. For Windows users: open the project and build in Visual Studio.
     For Linux users: call `make`
+    
+## Customizing VADNet and GestNet
+
+### NN Requirements
+
+#### VADNet
+
+- Input: Size 1*1*11. See **featureTest.m** inside the **scripts** folder for the composition of the input.
+- Output: Size 2. Probabilities for 
+ * **0:** No Gesture
+ * **1:** Gesture
+
+#### GestNet
+
+- Input: Size WindowSize(by default 72)*2*136. Raw SFT results inside the window duration. To use a different window size, change the 'WINDOW_SIZE' in **utils.hpp**.
+- Output: Size 4. Probabilities for
+ * **0:** No Gesture
+ * **1:** Left Swing
+ * **2:** Right Swing
+ * **3:** Double Click
+
+
+
 
 
