@@ -1,5 +1,5 @@
-#if GESTURE_TYPE == 1
 #include "GestureNetTF.hpp"
+#if GESTURE_TYPE == 1
 
 GestureNetTF::GestureNetTF( string modelName,
                             string inputName,

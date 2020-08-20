@@ -3,6 +3,12 @@
 
 #include "utils.hpp"
 
+#define GESTURE_NET_TYPE 0
+/* Gesture Net Types:
+    0:  PyTorch - GestureNetTorch
+    1:  Tensorflow - GestureNetTF
+    2:  ONNX Runtime - GestureNetONNX */
+
 //#define _DEBUG_NET
 
 // debug streaming

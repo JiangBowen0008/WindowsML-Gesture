@@ -3,6 +3,9 @@
 
 #include "utils.hpp"
 #include "GestureNet.hpp"
+
+#if GESTURE_NET_TYPE == 0
+
 #include <torch/torch.h>
 #include <torch/script.h>
 
@@ -57,4 +60,5 @@ protected:
     inline torch::Tensor cvt2Tensor(Floats);
 };
 
+#endif
 #endif

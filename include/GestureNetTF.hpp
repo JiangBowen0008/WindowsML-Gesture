@@ -3,6 +3,9 @@
 
 #include "utils.hpp"
 #include "GestureNet.hpp"
+
+#if GESTURE_NET_TYPE == 1
+
 #include "Model.h"
 #include "Tensor.h"
 
@@ -23,4 +26,5 @@ private:
     // Tensor LSTM1_buffer_, LSTM2_buffer_;
 };
 
+#endif
 #endif

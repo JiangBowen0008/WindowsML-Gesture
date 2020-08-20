@@ -1,5 +1,6 @@
 #include "GestureNetTorch.hpp"
 
+#if GESTURE_NET_TYPE == 0
 /*-------------------------------------------------------
                     Net Definition
 -------------------------------------------------------*/
@@ -207,3 +208,5 @@ GestureNetTorch::GestureNetTorch(string vadName, string gestName) :
     stackedInput.emplace_back( torch::zeros({ 2, 1, 64 }) );
     stackedInput.emplace_back( torch::zeros({ 2, 1, 64 }) );
 }
+
+#endif

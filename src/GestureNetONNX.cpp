@@ -1,5 +1,7 @@
 #include "GestureNetONNX.hpp"
 
+#if GESTURE_NET_TYPE == 2
+
 /*----------------------------------------------------------------
                          Main Functions
 ----------------------------------------------------------------*/
@@ -181,3 +183,4 @@ void GestureNetONNX::initializeStates()
     DBOUT << "LSTM states initialized." << endl;
 }
 
+#endif

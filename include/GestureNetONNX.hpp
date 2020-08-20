@@ -3,6 +3,9 @@
 
 #include "utils.hpp"
 #include "GestureNet.hpp"
+
+#if GESTURE_NET_TYPE == 2
+
 #include <onnxruntime_cxx_api.h>
 #include <stdlib.h>
 #include <stdio.h>
@@ -52,5 +55,7 @@ private:
 protected:
     void initializeStates();
 };
+
+#endif
 
 #endif

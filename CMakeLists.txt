@@ -7,8 +7,6 @@ project ("WindowsML-Gesture"
 		LANGUAGES CXX
 		VERSION 1.0)
 
-SET(CMAKE_BUILD_TYPE "Release")
-
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
@@ -21,36 +19,32 @@ link_directories(${CMAKE_CURRENT_LIST_DIR}/lib)
 find_package (Eigen3 3.3 REQUIRED NO_MODULE)
 include_directories(${CMAKE_CURRENT_LIST_DIR}/extern/eigen)
 
-# include tensorflow
-set(tf_path ${CMAKE_CURRENT_LIST_DIR}/extern/libtensorflow-cpu-windows)
-find_library(TENSORFLOW_LIB tensorflow HINT ${CMAKE_CURRENT_LIST_DIR}/lib)
-include_directories(${tf_path}/include)
-link_directories(${tf_path}/lib)
+# include tensorflow (uncomment and download necessary library to use tensorflow)
+# set(tf_path ${CMAKE_CURRENT_LIST_DIR}/extern/libtensorflow-cpu-windows)
+# find_library(TENSORFLOW_LIB tensorflow HINT ${CMAKE_CURRENT_LIST_DIR}/lib)
+# include_directories(${tf_path}/include)
+# link_directories(${tf_path}/lib)
 
-# include cppflow
-set(cppflow_path ${CMAKE_CURRENT_LIST_DIR}/extern/cppflow)
-include_directories(${cppflow_path}/include)
+# include cppflow (uncomment it when using tensorflow)
+# set(cppflow_path ${CMAKE_CURRENT_LIST_DIR}/extern/cppflow)
+# include_directories(${cppflow_path}/include)
 # aux_source_directory(${cppflow_path}/src aux_src)
 
 # include torch
 set(torch_path ${CMAKE_CURRENT_LIST_DIR}/extern/libtorch)
+
 set(CMAKE_PREFIX_PATH ${torch_path})
 find_package(Torch REQUIRED)
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${TORCH_CXX_FLAGS}")
 
-# incldue RTAudio
-# set(RTAudio_path ${CMAKE_CURRENT_LIST_DIR}/extern/rtaudio)
-# include_directories(${RTAudio_path})
-# # add_subdirectory(${RTAudio_path})
+# include onnx runtime (uncomment and download necessary library to use ONNX runtime)
+# set(onnx_path ${CMAKE_CURRENT_LIST_DIR}/extern/onnxruntime-win-x64-1.4.0)
+# include_directories(${onnx_path}/incldue)
+# find_library(ONNX_LIB onnxruntime HINT ${onnx_path}/lib)
+# link_directories(${onnx_path}/lib)
+# message(${ONNX_LIB})
 
-# include onnx runtime
-set(onnx_path ${CMAKE_CURRENT_LIST_DIR}/extern/onnxruntime-win-x64-1.4.0)
-include_directories(${onnx_path}/incldue)
-find_library(ONNX_LIB onnxruntime HINT ${onnx_path}/lib)
-link_directories(${onnx_path}/lib)
-message(${ONNX_LIB})
-
-# local files
+# include local source files
 include_directories(${CMAKE_CURRENT_LIST_DIR}/include)
 aux_source_directory(${CMAKE_CURRENT_LIST_DIR}/src aux_src)
 
@@ -61,9 +55,12 @@ file(GLOB asset_copy "${CMAKE_CURRENT_LIST_DIR}/assets/*")
 set(file_copy ${lib_copy} ${asset_copy} ${TORCH_DLLS})
 message(${file_copy})
 
-# Include sub-projects.
-message(${TENSORFLOW_LIB})
+# Include the main project folder.
 add_subdirectory ("WindowsML-Gesture")
+
+# set as the startup project in VS
+set_property(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} PROPERTY VS_STARTUP_PROJECT WindowsML-Gesture)
+
 
 
 
