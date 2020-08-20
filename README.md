@@ -14,11 +14,11 @@
  `git clone [url]`
 
  ### 2. Download PyTorch C++ Frontend
- Download Pytorch C++ Frontend from
+ Download Pytorch C++ Frontend from (choose one)
  
- Release: https://download.pytorch.org/libtorch/cpu/libtorch-win-shared-with-deps-1.6.0%2Bcpu.zip
+ - Release: https://download.pytorch.org/libtorch/cpu/libtorch-win-shared-with-deps-1.6.0%2Bcpu.zip
  
- Debug: https://download.pytorch.org/libtorch/cpu/libtorch-win-shared-with-deps-debug-1.6.0%2Bcpu.zip
+ - Debug: https://download.pytorch.org/libtorch/cpu/libtorch-win-shared-with-deps-debug-1.6.0%2Bcpu.zip
 
  Unzip the downloaded file and copy the **libTorch** folder into the **extern** folder of this project.
 
