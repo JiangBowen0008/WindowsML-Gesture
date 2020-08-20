@@ -3,7 +3,7 @@
  
 **Table of Contents**
  * [Supported Platforms](#supported-platforms)
- * [Step-by-step Compilation Guide](#step-by-step-compilation-guide)
+ * [Getting Started](#getting-started)
  * [Customizing VADNet and GestNet](#customizing-vadnet-and-gestnet)
     
 ## Supported Platforms
@@ -11,7 +11,7 @@
 - Linux (Not Tested)
 - Mac (Not Tested)
 
-## Step-by-step Compilation Guide 
+## Getting Started
  ### 1. Git Clone
   - If you do not have a compiled version of Eigen, use 
   ```
@@ -48,6 +48,8 @@
  ### 5. Compile WindowsML-Gesture
  
  1. Create a **build** folder inside the repo root directory.
+ 
+ ![CMake Instruction!](CMake-instruction.png "CMake-instruction")
  
  2. Generate the Visual Studio project files (makefiles for Linux) using CMake inside the **build** folder.
  
