@@ -14,9 +14,14 @@
 ## Step-by-step Compilation Guide 
  ### 1. Git Clone
   - If you do not have a compiled version of Eigen, use 
-  `git clone --recursive [url]`
+  ```
+  git clone --recursive [url]
+  ```
+  
   - Otherwise, use
-  `git clone [url]`
+  ```
+  git clone [url]
+  ```
 
  ### 2. Download PyTorch C++ Frontend
   Download Pytorch C++ Frontend from (choose one)
