@@ -2,9 +2,9 @@
  ML-based hand gesture recognition with Lenovo laptops.
  
 **Table of Contents**
-- [WindowsML-Gesture](#windowsml-gesture)
  * [Supported Platforms](#supported-platforms)
  * [Step-by-step Compilation Guide](#step-by-step-compilation-guide)
+ * [Customizing VADNet and GestNet](#customizing-vadnet-and-gestnet)
     
 ## Supported Platforms
 - Windows
